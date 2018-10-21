@@ -1,0 +1,34 @@
+easy_admin:
+    site_name: 'Blog'
+    entities:
+        User:
+            class: App\Entity\User
+            form:
+                fields:
+                    - username
+                    - { property: 'plainPassword', type: 'text' }
+                    - email
+                    - roles
+                    - isActive
+        Post:
+            class: App\Entity\Post
+            form:
+                fields:
+                    - title
+                    - summary
+                    - content
+                    - image
+        Image:
+            class: App\Entity\Image
+            form:
+                fields:
+                    - { property: 'file', type: 'vich_image' }
+            list:
+                fields:
+                    - id
+                    - name
+                    - { property: 'name', type: 'image', base_path: '%app.path.images%', label: 'Image' }
+                    - originalName
+                    - mimeType
+                    - size
+                    - dimensions

@@ -1,0 +1,14 @@
+// the ~ allows you to reference things in node_modules
+@import "~bootstrap/scss/bootstrap";
+
+@import "~highlight.js/styles/default.css";
+
+body {
+  background: #F2F2F2;
+}
+
+.content-card {
+  border-top: unset;
+  border-top-left-radius: unset;
+  border-top-right-radius: unset;
+}

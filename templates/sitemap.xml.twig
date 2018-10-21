@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for item in sitemap %}
+        <url>
+            <loc>{{ item.loc }}</loc>
+            {% if item.lastmod is defined %}<lastmod>{{ item.lastmod }}</lastmod>{% endif %}
+            {% if item.changefreq is defined %}<changefreq>{{ item.changefreq }}</changefreq>{% endif %}
+            {% if item.priority is defined %}<priority>{{ item.priority }}</priority>{% endif %}
+        </url>
+    {% endfor %}
+</urlset>
