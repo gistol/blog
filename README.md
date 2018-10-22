@@ -7,11 +7,10 @@
 cp .env.dist .env
 nano .env
 
-docker-compose build
 docker-compose up -d
 
 docker exec -it app_php composer update
-docker exec -it app_php bin/console do:sc:up --force
+docker exec -it app_php bin/console do:sc:up -f
 docker exec -it app_php bin/console app:create-admin-user
 
 docker exec -it app_yarn yarn
