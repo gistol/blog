@@ -18,12 +18,12 @@ docker exec -it app_yarn yarn run build
 ```
 
 ### Todo
-- Configuration for custom fields
+- Configuration for custom fields (site name, google analytics id)
 - Documentation
 - Meta tags
 - Open graph
 - Copy to clipboard for code html tag
-- Test
-- Auto installer
+- Auto installer (regenerate app secret, composer, yarn, admin user)
 - Log management
 - Deployment
+- Test
