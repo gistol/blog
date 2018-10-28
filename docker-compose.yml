@@ -1,96 +1,112 @@
-version: '3.5'
+version: '3'
 
 services:
+    admin:
+        container_name: app_admin
+        restart: always
+        build:
+            context: docker/images/admin
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./docker/logs/admin:/var/log
+            - ./docker/backup/web:/backup/web
+            - ./docker/backup/db:/backup/db
+        networks:
+            - app_network
+        depends_on:
+          - mysql
     nginx:
         container_name: app_nginx
         restart: always
         build:
             context: docker/images/nginx
         ports:
-        - '80:80'
+            - '80:80'
         volumes:
-        - ./:/var/www/project
-        - ./docker/logs/nginx:/var/log/nginx
+            - ./:/var/www/project
+            - ./docker/logs/nginx:/var/log/nginx
         networks:
-        - app_network
+            - app_network
         depends_on:
-        - php
+            - php
     php:
         container_name: app_php
         restart: always
         build:
             context: docker/images/php
             args:
-            - HOST_UID=${HOST_UID}
-            - HOST_GID=${HOST_GID}
+                - HOST_UID=${HOST_UID}
+                - HOST_GID=${HOST_GID}
         volumes:
-        - ./:/var/www/project
+            - ./:/var/www/project
         env_file: '.env'
         environment:
-        - APP_ENV=prod
+            - APP_ENV=prod
         depends_on:
-        - mysql
+            - mysql
         networks:
-        - app_network
+            - app_network
     php_dev:
         container_name: app_php_dev
         restart: always
         build:
             context: docker/images/php
             args:
-            - HOST_UID=${HOST_UID}
-            - HOST_GID=${HOST_GID}
+                - HOST_UID=${HOST_UID}
+                - HOST_GID=${HOST_GID}
         ports:
-        - '8000:8000'
+            - '8000:8000'
         volumes:
-        - ./:/var/www/project
+            - ./:/var/www/project
         command: 'php bin/console server:run 0.0.0.0:8000'
         env_file: '.env'
         environment:
-        - APP_ENV=dev
+            - APP_ENV=dev
         depends_on:
-        - mysql
+            - mysql
         networks:
-        - app_network
+            - app_network
     mysql:
         container_name: app_mysql
         restart: always
         image: mysql:5.7
         environment:
-        - MYSQL_HOST=${MYSQL_HOST}
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_HOST=${MYSQL_HOST}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
         volumes:
-        - ./docker/data/mysql:/var/lib/mysql
+            - ./docker/data/mysql:/var/lib/mysql
         networks:
-        - app_network
+            - app_network
     phpmyadmin:
         container_name: app_phpmyadmin
         restart: always
         image: phpmyadmin/phpmyadmin
         ports:
-        - '8001:80'
+            - '8001:80'
         environment:
-        - PMA_ARBITRARY=1
-        - PMA_HOST=${MYSQL_HOST}
+            - PMA_ARBITRARY=1
+            - PMA_HOST=${MYSQL_HOST}
         depends_on:
-        - mysql
+            - mysql
         networks:
-        - app_network
+            - app_network
     yarn:
         container_name: app_yarn
         restart: always
         build:
             context: docker/images/yarn
             args:
-            - HOST_UID=${HOST_UID}
-            - HOST_GID=${HOST_GID}
+                - HOST_UID=${HOST_UID}
+                - HOST_GID=${HOST_GID}
         volumes:
-        - ./:/var/www/project
+            - ./:/var/www/project
         networks:
-        - app_network
+            - app_network
 networks:
     app_network:
         driver: bridge
