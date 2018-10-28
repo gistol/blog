@@ -5,6 +5,8 @@
 /docker/data/
 !/docker/logs/.gitkeep
 /docker/logs/
+!/docker/backup/.gitkeep
+/docker/backup/
 
 ###> symfony/framework-bundle ###
 /.env
