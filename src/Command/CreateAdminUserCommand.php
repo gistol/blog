@@ -31,27 +31,34 @@ class CreateAdminUserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
         $io = new SymfonyStyle($input, $output);
+
+        $username = $io->ask('Please enter a username', 'admin');
+        $password = $io->ask('Please enter a password', 'admin');
+        $email = $io->ask('Please enter an email address', 'admin@admin.com');
 
         $userRepo = $this->em->getRepository('App:User');
 
-        $user = $userRepo->findOneBy(['username' => 'admin']);
+        $userByUsername = $userRepo->findOneBy(['username' => $username]);
+        $userByEmail = $userRepo->findOneBy(['email' => $email]);
 
-        if (!$user) {
+        if (!$userByUsername && !$userByEmail) {
             $user = new User();
             $user
-                ->setUsername('admin')
-                ->setPlainPassword('admin')
-                ->setEmail('admin')
+                ->setUsername($username)
+                ->setPlainPassword($password)
+                ->setEmail($email)
                 ->setRoles(['ROLE_ADMIN'])
                 ->setIsActive(true);
 
             $this->em->persist($user);
             $this->em->flush();
 
-            $io->success('OK!');
+            $io->success('New admin user has beed added..');
+
         } else {
-            $io->error('Already exists!');
+            $io->error('Username or email address is already exist.');
         }
     }
 }
