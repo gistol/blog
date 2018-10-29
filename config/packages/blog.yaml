@@ -1,0 +1,6 @@
+parameters:
+  app_title: 'İlker Gürcan Akyüz'
+twig:
+  globals:
+    ga_id: 'UA-128303286-1'
+    app_title: 'İlker Gürcan Akyüz'
