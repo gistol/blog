@@ -50,8 +50,8 @@ class AppInstall extends Command
             ],
             'twig' => [
                 'globals' => [
-                    'appTitle' => $siteName,
-                    'gaID' => $gaID
+                    'appTitle' => '%appTitle%',
+                    'gaID' => '%gaID%'
                 ]
             ]
         ];
