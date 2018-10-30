@@ -7,7 +7,6 @@
 /docker/logs/
 !/docker/backup/.gitkeep
 /docker/backup/
-/config/packages/blog.yaml
 
 ###> symfony/framework-bundle ###
 /.env
