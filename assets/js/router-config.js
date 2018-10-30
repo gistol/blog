@@ -1,7 +1,7 @@
 import Home from './components/Home';
-import About from './components/About';
 import Post from './components/Post';
 import Login from './components/Login';
+import Page from './components/Page';
 
 export const routes = [
     {
@@ -10,9 +10,9 @@ export const routes = [
         component: Home
     },
     {
-        path: '/contact',
-        name: 'contact',
-        component: About,
+        path: '/page/:slug(.+)-:id(.+)',
+        name: 'page',
+        component: Page
     },
     {
         path: '/:slug(.+)-:id(.+)',

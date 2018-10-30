@@ -2,15 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Page;
 use App\Entity\Post;
+use App\Repository\PageRepository;
 use App\Repository\PostRepository;
-use App\Service\MarkdownHelper;
+use App\Service\HashidsHelper;
+use App\Service\PageResponseHelper;
+use App\Service\PageService;
 use App\Service\PostResponseHelper;
-use Cocur\Slugify\SlugifyInterface;
+use App\Service\PostService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class ApiController extends AbstractController
 {
@@ -42,39 +45,61 @@ class ApiController extends AbstractController
 
     /**
      * @Route("/api/posts/{hashid}", name="api_get_post", methods={"GET"})
+     * @Route("/api/pages/{hashid}", name="api_get_page", methods={"GET"})
      *
      * @param string $hashid
-     * @param PostRepository $postRepo
-     * @param PostResponseHelper $postResponseHelper
+     * @param PostService $postService
+     * @param PageService $pageService
+     * @param HashidsHelper $hashidsHelper
      * @return JsonResponse
      */
-    public function getPost(
+    public function getContent(
         string $hashid,
-        PostRepository $postRepo,
-        PostResponseHelper $postResponseHelper
+        PostService $postService,
+        PageService $pageService,
+        HashidsHelper $hashidsHelper
     ): JsonResponse
     {
-        $post = $postRepo->findByHashid($hashid);
 
-        if (!$post) {
-            return $this->json([
-                'error' => 'Yazı bulunamadı!'
-            ]);
+        [$type, $id] = $hashidsHelper->decodeTypeAndId($hashid);
+
+        $data = [];
+
+        if($type === $hashidsHelper::POST) {
+            $data = $postService->getPost($id);
+        } else if($type === $hashidsHelper::PAGE) {
+            $data = $pageService->getPage($id);
         }
-
-        // =============================================================================================================
-
-        $previousPost = $postRepo->findPrevious($post);
-        $nextPost = $postRepo->findNext($post);
-
-        // =============================================================================================================
-
-        $data = $postResponseHelper->preparePostForShow($post);
-        $data['previousPost'] = $previousPost === null ? null : $postResponseHelper->preparePostForList($previousPost);
-        $data['nextPost'] = $nextPost === null ? null : $postResponseHelper->preparePostForList($nextPost);
 
         return $this->json([
             'data' => $data
         ]);
     }
+
+    /**
+     * @Route("/api/pages", methods={"GET"})
+     *
+     * @param PageRepository $pageRepository
+     * @param PageResponseHelper $pageResponseHelper
+     * @return JsonResponse
+     */
+    public function getPages(PageRepository $pageRepository, PageResponseHelper $pageResponseHelper): JsonResponse
+    {
+        $pages = array_map(function (Page $page) use ($pageResponseHelper) {
+            return $pageResponseHelper->preparePageForList($page);
+        },
+            $pageRepository->findBy(
+                [],
+                [
+                    'id' => 'DESC'
+                ],
+                10
+            )
+        );
+
+        return $this->json([
+            'items' => $pages
+        ]);
+    }
+
 }

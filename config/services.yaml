@@ -33,6 +33,10 @@ services:
         tags:
         - { name: doctrine.event_subscriber, connection: default }
 
+    App\EventSubscriber\PageSlugSubscriber:
+        tags:
+        - { name: doctrine.event_subscriber, connection: default }
+
     # For VichUploaderBundle
     App\Service\ImageNamer:
         public: true

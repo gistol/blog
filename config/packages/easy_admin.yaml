@@ -32,3 +32,10 @@ easy_admin:
                     - mimeType
                     - size
                     - dimensions
+        Page:
+            class: App\Entity\Page
+            form:
+                fields:
+                    - 'title'
+                    - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+                    - 'isActive'

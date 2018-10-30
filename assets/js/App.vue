@@ -12,7 +12,7 @@
                 <div class="collapse navbar-collapse" :class="{ show: navbarShow }">
                     <div class="navbar-nav">
                         <router-link :to="{ name: 'home' }" class="nav-item nav-link">Blog</router-link>
-                        <router-link :to="{ name: 'contact' }" class="nav-item nav-link">İletişim</router-link>
+                        <a v-for="page in pages" :href="'/page/'+page.slug+'-'+page.id" class="nav-item nav-link">{{ page.title }}</a>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,25 @@
     export default {
         data: function () {
             return {
-                navbarShow: false
+                navbarShow: false,
+                pages: []
+            }
+        },
+        created () {
+            this.fetchData();
+        },
+        methods: {
+            fetchData () {
+                let vm = this;
+                fetch('/api/pages')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (json) {
+                        if (typeof json.items !== 'undefined') {
+                            vm.pages = json.items;
+                        }
+                    });
             }
         }
     }

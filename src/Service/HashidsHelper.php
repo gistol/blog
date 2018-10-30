@@ -7,6 +7,7 @@ use Hashids\Hashids;
 class HashidsHelper
 {
     public const POST = 2;
+    public const PAGE = 3;
 
     private $hashids;
 
@@ -40,4 +41,40 @@ class HashidsHelper
 
         return $id;
     }
+
+    public function encodePageId(int $id): string
+    {
+        return $this->hashids->encode(self::PAGE, $id);
+    }
+
+    public function decodePageId(string $hashid): int
+    {
+        $decoded = $this->hashids->decode($hashid);
+
+        if (2 !== \count($decoded)) {
+            return -1;
+        }
+
+        [$type, $id] = $decoded;
+
+        if ($type !== self::PAGE) {
+            return -1;
+        }
+
+        return $id;
+
+    }
+
+    public function decodeTypeAndId(string $hashid): array
+    {
+        $decoded = $this->hashids->decode($hashid);
+
+        if (2 !== \count($decoded)) {
+            return -1;
+        }
+
+        return $decoded;
+
+    }
+
 }
