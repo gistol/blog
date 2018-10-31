@@ -21,7 +21,7 @@ sync(store, router);
 import VueAnalytics from 'vue-analytics'
 
 Vue.use(VueAnalytics, {
-    id: 'UA-47178876-8',
+    id: window.GA_ID,
     router
 });
 

@@ -4,7 +4,7 @@
         <!-- Header -->
         <nav class="navbar navbar-dark bg-dark sticky-top navbar-expand-lg">
             <div class="container">
-                <router-link :to="{ name: 'home' }" class="navbar-brand" href="#">Selim Can CABA</router-link>
+                <router-link :to="{ name: 'home' }" class="navbar-brand" href="#">{{ appTitle }}</router-link>
 
                 <button class="navbar-toggler" type="button" @click="navbarShow = !navbarShow">
                     <span class="navbar-toggler-icon"></span>
@@ -31,11 +31,30 @@
 </template>
 
 <script>
+
+    import { mapGetters, mapActions } from 'vuex';
+
     export default {
         data: function () {
             return {
-                navbarShow: false
+                navbarShow: false,
+                appTitle: ''
             }
+        },
+        computed: Object.assign(mapGetters(['getAppTitle'])),
+        methods:
+            Object.assign({
+                updateGAID(ga_id) {
+                    this.updateGAID(ga_id);
+                },
+                updateAppTitle(title) {
+                    this.updateAppTitle(title);
+                }
+            }, mapActions(['updateGAID', 'updateAppTitle'])),
+        created() {
+            this.updateGAID(window.GA_ID);
+            this.updateAppTitle(window.appTitle);
+            this.appTitle = this.getAppTitle;
         }
     }
 </script>
