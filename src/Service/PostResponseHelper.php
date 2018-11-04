@@ -15,18 +15,21 @@ class PostResponseHelper
     private $markdownHelper;
 
     private $hashidsHelper;
+    private $appTitle;
 
     public function __construct(
         UploaderHelper $uploaderHelper,
         SlugifyInterface $slugify,
         MarkdownHelper $markdownHelper,
-        HashidsHelper $hashidsHelper
+        HashidsHelper $hashidsHelper,
+        $appTitle
     )
     {
         $this->uploaderHelper = $uploaderHelper;
         $this->slugify = $slugify;
         $this->markdownHelper = $markdownHelper;
         $this->hashidsHelper = $hashidsHelper;
+        $this->appTitle = $appTitle;
     }
 
     public function preparePostForList(Post $post): array
@@ -57,7 +60,7 @@ class PostResponseHelper
         return [
             'id' => $post->getId(),
             'slug' => $slug,
-            'title' => $post->getTitle(),
+            'title' => $post->getTitle() . ' - ' . $this->appTitle,
 
             'content' => $this->markdownHelper->transform($post->getContent()),
 

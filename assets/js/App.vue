@@ -4,7 +4,7 @@
         <!-- Header -->
         <nav class="navbar navbar-dark bg-dark sticky-top navbar-expand-lg">
             <div class="container">
-                <router-link :to="{ name: 'home' }" class="navbar-brand" href="#">Selim Can CABA</router-link>
+                <router-link :to="{ name: 'home' }" class="navbar-brand" href="#">{{ appTitle }}</router-link>
 
                 <button class="navbar-toggler" type="button" @click="navbarShow = !navbarShow">
                     <span class="navbar-toggler-icon"></span>
@@ -31,30 +31,45 @@
 </template>
 
 <script>
+
+    import { mapGetters, mapActions } from 'vuex';
+
     export default {
         data: function () {
             return {
                 navbarShow: false,
-                pages: []
+                pages: [],
+                appTitle: ''
             }
         },
         created () {
             this.fetchData();
+            this.updateGAID(window.GA_ID);
+            this.updateAppTitle(window.appTitle);
+            this.appTitle = this.getAppTitle;
         },
-        methods: {
-            fetchData () {
-                let vm = this;
-                fetch('/api/pages')
-                    .then(function (response) {
-                        return response.json();
-                    })
-                    .then(function (json) {
-                        if (typeof json.items !== 'undefined') {
-                            vm.pages = json.items;
-                        }
-                    });
-            }
-        }
+        computed: Object.assign(mapGetters(['getAppTitle'])),
+        methods:
+            Object.assign({
+                updateGAID(ga_id) {
+                    this.updateGAID(ga_id);
+                },
+                updateAppTitle(title) {
+                    this.updateAppTitle(title);
+                },
+                fetchData () {
+                    let vm = this;
+                    fetch('/api/pages')
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (json) {
+                            if (typeof json.items !== 'undefined') {
+                                vm.pages = json.items;
+                            }
+                        });
+                }
+            }, mapActions(['updateGAID', 'updateAppTitle'])),
     }
 </script>
 

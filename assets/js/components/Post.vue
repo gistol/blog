@@ -114,7 +114,7 @@
                             vm.post = json.data;
                             vm.loading = false;
 
-                            document.title = json.data.title + ' - Selim Can CABA';
+                            document.title = json.data.title;
                         } else {
                             vm.error = json.error;
                             vm.loading = false;
