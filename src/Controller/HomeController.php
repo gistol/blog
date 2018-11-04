@@ -13,6 +13,7 @@ class HomeController extends Controller
      * @Route("/contact", name="contact")
      * @Route("/{slug}-{id}", name="home_get_post")
      * @Route("/login", name="login")
+     * @Route("/page/{slug}-{id}", name="page")
      */
     public function index(): Response
     {

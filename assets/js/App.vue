@@ -12,7 +12,7 @@
                 <div class="collapse navbar-collapse" :class="{ show: navbarShow }">
                     <div class="navbar-nav">
                         <router-link :to="{ name: 'home' }" class="nav-item nav-link">Blog</router-link>
-                        <router-link :to="{ name: 'contact' }" class="nav-item nav-link">İletişim</router-link>
+                        <a v-for="page in pages" :href="'/page/'+page.slug+'-'+page.id" class="nav-item nav-link">{{ page.title }}</a>
                     </div>
                 </div>
             </div>
@@ -38,8 +38,15 @@
         data: function () {
             return {
                 navbarShow: false,
+                pages: [],
                 appTitle: ''
             }
+        },
+        created () {
+            this.fetchData();
+            this.updateGAID(window.GA_ID);
+            this.updateAppTitle(window.appTitle);
+            this.appTitle = this.getAppTitle;
         },
         computed: Object.assign(mapGetters(['getAppTitle'])),
         methods:
@@ -49,13 +56,20 @@
                 },
                 updateAppTitle(title) {
                     this.updateAppTitle(title);
+                },
+                fetchData () {
+                    let vm = this;
+                    fetch('/api/pages')
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (json) {
+                            if (typeof json.items !== 'undefined') {
+                                vm.pages = json.items;
+                            }
+                        });
                 }
             }, mapActions(['updateGAID', 'updateAppTitle'])),
-        created() {
-            this.updateGAID(window.GA_ID);
-            this.updateAppTitle(window.appTitle);
-            this.appTitle = this.getAppTitle;
-        }
     }
 </script>
 
