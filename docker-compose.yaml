@@ -13,6 +13,7 @@ services:
             - ./docker/logs/admin:/var/log
             - ./docker/backup/web:/backup/web
             - ./docker/backup/db:/backup/db
+            - ./public:/public
         networks:
             - app_network
         depends_on:

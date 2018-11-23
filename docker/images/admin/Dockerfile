@@ -9,8 +9,13 @@ RUN apk --update add curl \
     && curl -L $DOWNLOAD_URL | tar -xz -C /tmp/download \
     && mv /tmp/download/docker/docker /usr/local/bin/ \
     && rm -rf /tmp/download \
-    && apk del curl \
-    && rm -rf /var/cache/apk/*
+    && apk del curl
+
+# Install zip
+RUN apk add zip
+
+# Remove apk cache
+RUN rm -rf /var/cache/apk/*
 
 # Cron : https://stackoverflow.com/questions/37015624/how-to-run-a-cron-job-inside-a-docker-container
 RUN mkdir /scripts
