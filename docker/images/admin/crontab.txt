@@ -1,1 +1,2 @@
 0 1 * * * /scripts/db_backup.sh >> /var/log/db_backup.log
+5 1 * * * /scripts/web_backup.sh >> /var/log/web_backup.log
