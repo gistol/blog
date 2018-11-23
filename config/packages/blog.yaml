@@ -1,7 +1,0 @@
-parameters:
-    appTitle: ''
-    gaID: ''
-twig:
-    globals:
-        appTitle: ''
-        gaID: ''
