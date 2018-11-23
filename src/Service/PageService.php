@@ -1,18 +1,20 @@
 <?php
 
-
 namespace App\Service;
-
 
 use App\Repository\PageRepository;
 
+/**
+ * Class PageService
+ * @package App\Service
+ */
 class PageService
 {
-
     /**
      * @var PageRepository
      */
     private $pageRepo;
+
     /**
      * @var PageResponseHelper
      */
@@ -30,14 +32,17 @@ class PageService
      */
     public function getPage(int $id)
     {
-        $page = $this->pageRepo->find($id);
+        $page = $this->pageRepo->findOneBy(
+            [
+                'id' => $id,
+                'isActive' => true
+            ]
+        );
 
         if (!$page) {
             return false;
         }
 
         return $this->pageResponseHelper->preparePageForShow($page);
-
     }
-
 }

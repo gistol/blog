@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,9 +36,20 @@ class Page
      */
     private $slug;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $sort;
+
     public function __construct()
     {
+        $this->sort = 999;
         $this->isActive = true;
+    }
+
+    public function __toString()
+    {
+        return 'Page: ' . $this->getTitle();
     }
 
     public function getId(): ?int
@@ -96,9 +105,15 @@ class Page
         return $this;
     }
 
-    public function __toString()
+    public function getSort(): ?int
     {
-        return 'Page: ' . $this->getTitle();
+        return $this->sort;
     }
 
+    public function setSort(int $sort): self
+    {
+        $this->sort = $sort;
+
+        return $this;
+    }
 }

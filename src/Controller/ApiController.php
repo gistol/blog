@@ -60,14 +60,13 @@ class ApiController extends AbstractController
         HashidsHelper $hashidsHelper
     ): JsonResponse
     {
-
         [$type, $id] = $hashidsHelper->decodeTypeAndId($hashid);
 
         $data = [];
 
-        if($type === $hashidsHelper::POST) {
+        if ($type === $hashidsHelper::POST) {
             $data = $postService->getPost($id);
-        } else if($type === $hashidsHelper::PAGE) {
+        } else if ($type === $hashidsHelper::PAGE) {
             $data = $pageService->getPage($id);
         }
 
@@ -89,8 +88,11 @@ class ApiController extends AbstractController
             return $pageResponseHelper->preparePageForList($page);
         },
             $pageRepository->findBy(
-                [],
                 [
+                    'isActive' => true
+                ],
+                [
+                    'sort' => 'ASC',
                     'id' => 'DESC'
                 ],
                 10
@@ -101,5 +103,4 @@ class ApiController extends AbstractController
             'items' => $pages
         ]);
     }
-
 }
