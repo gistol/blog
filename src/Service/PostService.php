@@ -1,23 +1,30 @@
 <?php
 
-
 namespace App\Service;
-
 
 use App\Repository\PostRepository;
 
+/**
+ * Class PostService
+ * @package App\Service
+ */
 class PostService
 {
-
     /**
      * @var PostRepository
      */
     private $postRepo;
+
     /**
      * @var PostResponseHelper
      */
     private $postResponseHelper;
 
+    /**
+     * PostService constructor.
+     * @param PostRepository $postRepo
+     * @param PostResponseHelper $postResponseHelper
+     */
     public function __construct(PostRepository $postRepo, PostResponseHelper $postResponseHelper)
     {
         $this->postRepo = $postRepo;
@@ -49,5 +56,4 @@ class PostService
 
         return $data;
     }
-
 }

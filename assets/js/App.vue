@@ -9,10 +9,18 @@
                 <button class="navbar-toggler" type="button" @click="navbarShow = !navbarShow">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" :class="{ show: navbarShow }">
                     <div class="navbar-nav">
+
                         <router-link :to="{ name: 'home' }" class="nav-item nav-link">Blog</router-link>
-                        <a v-for="page in pages" :href="'/page/'+page.slug+'-'+page.id" class="nav-item nav-link">{{ page.title }}</a>
+
+                        <div v-for="page in pages">
+                            <router-link :to="{ name: 'page', params: { id: page.id, slug: page.slug } }" class="nav-item nav-link">
+                                {{ page.title }}
+                            </router-link>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -38,4 +38,5 @@ easy_admin:
                 fields:
                     - 'title'
                     - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+                    - sort
                     - 'isActive'
