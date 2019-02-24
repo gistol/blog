@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>{{ appTitle }}</title>
+    <title>{{ appTitle|slice(1, -1)  }}</title>
 
     <link rel="stylesheet" href="{{ asset('build/main.css') }}">
 
@@ -16,7 +16,7 @@
 
 <script type="text/javascript">
     window.GA_ID = '{{ gaID }}';
-    window.appTitle = '{{ appTitle }}';
+    window.appTitle = '{{ appTitle|slice(1, -1) }}';
 </script>
 <script src="{{ asset('build/main.js') }}"></script>
 

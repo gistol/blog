@@ -29,7 +29,7 @@ class PostResponseHelper
         $this->slugify = $slugify;
         $this->markdownHelper = $markdownHelper;
         $this->hashidsHelper = $hashidsHelper;
-        $this->appTitle = $appTitle;
+        $this->appTitle = substr($appTitle, 1, -1); // deleting double quotes
     }
 
     public function preparePostForList(Post $post): array
