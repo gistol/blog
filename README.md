@@ -16,6 +16,8 @@ docker-compose exec php bin/console ckeditor:install
 
 docker-compose exec yarn yarn
 docker-compose exec yarn yarn run build
+
+docker-compose down && docker-compose up -d
 ```
 
 ### Todo
