@@ -1,6 +1,6 @@
 # blog
 
-## This repository is experimental !!!
+## This project is experimental !!!
 
 ### Install
 ```bash
@@ -9,15 +9,13 @@ nano .env
 
 docker-compose up -d
 
-docker exec -it app_php composer update
-docker exec -it app_php bin/console do:sc:up -f
-docker exec -it app_php bin/console app:install
+docker-compose exec php composer update
+docker-compose exec php bin/console do:sc:up -f
+docker-compose exec php bin/console app:install
+docker-compose exec php bin/console ckeditor:install
 
-docker exec -it app_yarn yarn
-docker exec -it app_yarn yarn run build
-
-docker exec -it app_php bin/console ckeditor:install
-
+docker-compose exec yarn yarn
+docker-compose exec yarn yarn run build
 ```
 
 ### Todo

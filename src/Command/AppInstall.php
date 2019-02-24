@@ -11,65 +11,82 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class AppInstall
+ * @package App\Command
+ */
 class AppInstall extends Command
 {
-
     protected static $defaultName = 'app:install';
+
     /**
      * @var EntityManagerInterface
      */
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var string
+     */
+    private $projectDir;
+
+    public function __construct(EntityManagerInterface $em, Filesystem $filesystem, string $projectDir)
     {
         parent::__construct();
 
         $this->em = $em;
+        $this->filesystem = $filesystem;
+        $this->projectDir = $projectDir;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setDescription('Install Blog')
-        ;
+            ->setDescription('Install Blog');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $io = new SymfonyStyle($input, $output);
 
         $siteName = $io->ask('Please enter the site name', 'Foo');
         $gaID = $io->ask('Please enter the google account id');
-        $addAdminUser = $io->confirm('Would you like to create an admin user?', true);
+        $addAdminUser = $io->confirm('Would you like to create an admin user?');
 
-        $array = [
-            'parameters' => [
-                'appTitle' => $siteName,
-                'gaID' => $gaID
-            ],
+        // Update blog.yaml
+        $twigGlobals = [
             'twig' => [
                 'globals' => [
-                    'appTitle' => '%appTitle%',
-                    'gaID' => '%gaID%'
+                    'appTitle' => '%env(resolve:APP_TITLE)%',
+                    'gaID' => '%env(resolve:APP_GA_ID)%'
                 ]
             ]
         ];
 
-        $yaml = Yaml::dump($array, 4);
+        $this->filesystem->dumpFile('config/packages/blog.yaml', Yaml::dump($twigGlobals, 4));
 
-        $fileSystem = new Filesystem();
-
-        $yamlFile = 'config/packages/blog.yaml';
-
-        if(!$fileSystem->exists($yamlFile)) {
-            $fileSystem->touch($yamlFile);
-        }
-        $fileSystem->dumpFile($yamlFile, $yaml);
+        // Update the .env file
+        $envFile = file_get_contents($this->projectDir . '/.env');
+        $envFile = str_replace(
+            [
+                'DefaultAppTitle',
+                'DefaultAppGaId',
+            ],
+            [
+                '"'.$siteName.'"',
+                '"'.$gaID.'"',
+            ],
+            $envFile
+        );
+        $this->filesystem->dumpFile('.env', $envFile);
 
         $outputMessages = ['Your configuration saved to config/packages/blog.yaml.'];
 
-        if($addAdminUser) {
+        if ($addAdminUser) {
 
             $username = $io->ask('Please enter a username', 'admin');
             $password = $io->ask('Please enter a password', 'admin');
@@ -101,7 +118,5 @@ class AppInstall extends Command
         }
 
         $io->success($outputMessages);
-
     }
-
 }
