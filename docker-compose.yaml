@@ -9,10 +9,10 @@ services:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - ./docker/logs/admin:/var/log
-            - ./docker/backup/web:/backup/web
-            - ./docker/backup/db:/backup/db
-            - ./public:/public
+            - ./docker/logs/admin:/var/log:cached
+            - ./docker/backup/web:/backup/web:cached
+            - ./docker/backup/db:/backup/db:cached
+            - ./public:/public:cached
         networks:
             - app_network
         depends_on:
@@ -24,8 +24,8 @@ services:
         ports:
             - '80:80'
         volumes:
-            - ./:/var/www/project
-            - ./docker/logs/nginx:/var/log/nginx
+            - ./:/var/www/project:cached
+            - ./docker/logs/nginx:/var/log/nginx:cached
         networks:
             - app_network
         depends_on:
@@ -38,7 +38,7 @@ services:
                 - HOST_UID=${HOST_UID}
                 - HOST_GID=${HOST_GID}
         volumes:
-            - ./:/var/www/project
+            - ./:/var/www/project:cached
         env_file: '.env'
         environment:
             - APP_ENV=prod
@@ -56,7 +56,7 @@ services:
         ports:
             - '8000:8000'
         volumes:
-            - ./:/var/www/project
+            - ./:/var/www/project:cached
         command: 'php bin/console server:run 0.0.0.0:8000'
         env_file: '.env'
         environment:
@@ -76,7 +76,7 @@ services:
             - MYSQL_USER=${MYSQL_USER}
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
         volumes:
-            - ./docker/data/mysql:/var/lib/mysql
+            - ./docker/data/mysql:/var/lib/mysql:cached
         networks:
             - app_network
     phpmyadmin:
@@ -99,7 +99,7 @@ services:
                 - HOST_UID=${HOST_UID}
                 - HOST_GID=${HOST_GID}
         volumes:
-            - ./:/var/www/project
+            - ./:/var/www/project:cached
         networks:
             - app_network
 networks:
