@@ -12,17 +12,7 @@
         </div>
 
         <div v-else>
-
-            <div class="card-body">
-
-                <h2 class="text-dark">{{ page.title }}</h2>
-
-                <hr>
-
-                <div id="page_content" v-html="page.content"></div>
-
-            </div>
-
+            <div id="page_content" v-html="page.content"></div>
         </div>
 
     </div>

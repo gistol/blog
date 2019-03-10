@@ -35,6 +35,13 @@
             </div>
         </div>
 
+        <!-- Download -->
+        <div class="text-secondary text-center">
+            <small>
+            Bu blogun kaynak kodlarını <a href="https://github.com/RetroHat/blog">github</a>tan indirebilirsiniz.
+            </small>
+        </div>
+
     </div>
 </template>
 
